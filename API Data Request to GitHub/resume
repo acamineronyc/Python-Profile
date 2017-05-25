@@ -1,24 +1,80 @@
-web application programming interface (API) automatically request specific
-information from a website rather than entire pages.
-
-Because programs written like this will always use current data to generate a
-visualization, even when that data might be rapidly changing, it will always be up to date.
-
 A web API is a part of a website designed to interact with programs that
-use very specific URLs to request certain information. This kind of request is called an API call. The requested data will be returned in an easily pro- cessed format, such as JSON or CSV. Most apps that rely on external data sources, such as apps that integrate with social media sites, rely on API calls.
+use very specific URLs to request certain information (API call).
+The requested data will be returned in an easily pro- cessed format, such as JSON or CSV.
+Most apps that rely on external data sources, such as apps that integrate with social media sites, rely on API calls.
 
-The requested data will be returned in an easily processed format,
-such as JSON or CSV.
+We’ll base our visualization on information from GitHub, a site that allows programmers to collaborate on projects.
+We’ll use GitHub’s API to request information about Python projects on the site and
+then generate an interactive visualization of the relative popularity of these projects in Pygal.
+{
+     "total_count": 713062,
+     "incomplete_results": false,
+     "items": [
+       {
+         "id": 3544424,
+         "name": "httpie",
+         "full_name": "jkbrzt/httpie",
+--snip--
 
-Most apps that rely on external data sources, such as apps that integrate
-with social media sites, rely on API calls.
-##############################################################################
+A. Processing an API Response
 
+1. Import the request module.
+2. Store the URL of the API call in the variable "url".
+3. Use request method "get()"" to make the API call and pass it the URL, and store the "response object" in the variable r.
+4. The response object has an "attribute called status_code", which tells us whether the request was successful.
+(A status code of 200 indicates a successful response.)
+5. We print the value of status_code to make sure the call went through successfully.
+6. Because the API returns the information in "JSON format", so we use the "json() method" to
+convert the information to a "Python dictionary".
+7. The resulting dictionary is store in response_dict variable.
+8. the program then print the keys from response_dict.
+9. The response dictionary contains only three keys: 'items', 'total_count', and 'incomplete_results'.
+
+B. Working with the Response Dictionary. The data store from the API Call.
+1. Print the value associated with 'total_count', which represents the total number of Python repositories on GitHub.
+2. The value associated with 'items' is a list containing a number of dictionaries,
+each of which contains data about an "individual Python repository".
+3. Store this list of dictionaries in repo_dicts.
+4. Then print the length of repo_dicts to see how many repositories we have information for.
+5. To take a closer look at the information returned about each repository,
+we pull out the first item from repo_dicts and store it in "repo_dict".
+6. We then print the number of keys in the dictionary to see how much information we have.
+7. Then print all of the dictionary’s keys to see what kind of information is included.
+8. Next pull out the values for some of the keys in repo_dict:
 print("\nSelected information about first repository:")
 print('Name:', repo_dict['name'])
-print('Owner:', repo_dict['owner']['login'])   # owner = ['login', 'vinta'] etc..
+print('Owner:', repo_dict['owner']['login'])
 print('Stars:', repo_dict['stargazers_count'])
 print('Repository:', repo_dict['html_url'])
 print('Created:', repo_dict['created_at'])
 print('Updated:', repo_dict['updated_at'])
 print('Description:', repo_dict['description'])
+Status code: 200
+   Total repositories: 713065
+   Repositories returned: 30
+   Selected information about first repository:
+   Name: httpie
+   Owner: jkbrzt
+   Stars: 16101
+   Repository: https://github.com/jkbrzt/httpie
+   Created: 2012-02-25T12:39:13Z
+   Updated: 2015-07-13T14:56:41Z
+   Description: CLI HTTP client; user-friendly cURL replacement featuring
+   intuitive UI, JSON support, syntax highlighting, wget-like downloads,
+   extensions, etc.
+
+C. Summarizing the Top Repositories
+1. When we make a visualization for this data, we’ll want to include more than one repository.
+2. Let’s write a loop to print selected information about each of the repositories returned by
+the API call so we can include them all in the visualization:
+
+print("\nSelected information about each repository:") for repo_dict in repo_dicts:
+       print('\nName:', repo_dict['name'])
+       print('Owner:', repo_dict['owner']['login'])
+       print('Stars:', repo_dict['stargazers_count'])
+       print('Repository:', repo_dict['html_url'])
+       print('Description:', repo_dict['description'
+
+3. We print an introductory message at. At we loop through all the dictionaries in repo_dicts.
+4. Inside the loop we print the name of each project, its owner, how many stars it has,
+its URL on GitHub, and the project’s description:
